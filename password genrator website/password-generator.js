@@ -1,42 +1,28 @@
-function generatePassword() {
-  var length = parseInt(document.getElementById("length").value);
-  var uppercase = document.getElementById("uppercase").checked;
-  var lowercase = document.getElementById("lowercase").checked;
-  var numbers = document.getElementById("numbers").checked;
-  var symbols = document.getElementById("symbols").checked;
-  var password = "";
+const lengthInput = document.getElementById("length");
+const generateButton = document.getElementById("generate");
+const passwordInput = document.getElementById("password");
+const copyButton = document.getElementById("copy");
 
-  var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-  var numberChars = "0123456789";
-  var symbolChars = "!@#$%^&*()_+";
+generateButton.addEventListener("click", () => {
+  const length = lengthInput.value;
+  const password = generatePassword(length);
+  passwordInput.value = password;
+  document.getElementById("password-container").style.display = "block";
+});
 
-  var allChars = "";
+copyButton.addEventListener("click", () => {
+  passwordInput.select();
+  passwordInput.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  alert("Password copied to clipboard!");
+});
 
-  if (uppercase) {
-    allChars += uppercaseChars;
+function generatePassword(length) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]\:;?><,./-=";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    password += characters[randomIndex];
   }
-
-  if (lowercase) {
-    allChars += lowercaseChars;
-  }
-
-  if (numbers) {
-    allChars += numberChars;
-  }
-
-  if (symbols) {
-    allChars += symbolChars;
-  }
-
-  for (var i = 0; i < length; i++) {
-    password += allChars.charAt(Math.floor(Math.random() * allChars.length));
-  }
-
   return password;
 }
-
-document.getElementById("generate").addEventListener("click", function() {
-  var password = generatePassword();
-  document.getElementById("password").value = password;
-});
