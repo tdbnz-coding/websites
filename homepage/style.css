@@ -1,21 +1,68 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+body{
+
 }
 
-/* General overwrite */
-a {
+/*     General overwrite     */
+a{
     color: #2C93FF;
 }
-
-a:hover,
-a:focus {
+a:hover, a:focus {
     color: #1084FF;
 }
-
-a:focus,
-a:active,
+a:focus, a:active,
 button::-moz-focus-inner,
 input[type="reset"]::-moz-focus-inner,
-input[type="button"]
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+select::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    outline : 0;
+}
+
+/*           Typography          */
+p{
+    font-size: 16px;
+    line-height: 1.6180em;
+}
+
+.main{
+    background-image: url('https://i.postimg.cc/85vNmr73/background.jpg');
+    background-position: center center;
+    background-size: cover;
+    height: auto;
+    left: 0;
+    min-height: 100%;
+    min-width: 100%;
+    position: absolute;
+    top: 0;
+    width: auto;
+}
+.cover{
+    position: fixed;
+    opacity: 1;
+    background-color: rgba(0,0,0,.6);
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.cover.black{
+    background-color: rgba(0,0,0,.6);
+}
+
+.logo-container .logo{
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid #333333;
+    width: 60px;
+    float: left;
+}
+
+.main .logo{
+    color: #FFFFFF;
+    font-size: 56px;
+    font-weight: 300;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 10
