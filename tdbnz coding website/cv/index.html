@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - CV</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: #f0f0f0; /* default background color */
+            transition: background 0.5s ease; /* smooth transition for background change */
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        /* Add your custom styles for the CV content */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Your CV content goes here -->
+
+        <h1>Your Name</h1>
+        <p>Web Developer</p>
+
+        <!-- Add your CV sections with animations -->
+        <div class="animated fadeInLeft">
+            <h2>Education</h2>
+            <!-- Add education details here -->
+        </div>
+
+        <div class="animated fadeInRight">
+            <h2>Experience</h2>
+            <!-- Add experience details here -->
+        </div>
+
+        <!-- Button to change background color -->
+        <button onclick="changeBackground()">Change Background</button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Your custom script for background change -->
+    <script>
+        function changeBackground() {
+            document.body.style.background = '#c0c0c0'; // Change this to your desired background color
+        }
+    </script>
+</body>
+</html>
