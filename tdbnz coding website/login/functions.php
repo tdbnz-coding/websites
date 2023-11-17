@@ -22,7 +22,7 @@ function check_login($con)
 	}
 
 	// Redirect to Login
-	
+
 	header("Location: login.php");
 	die;
 }
