@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Who Wants to Be a Millionaire</title>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <div class="jumbotron">
+      <h1 class="display-4">Who Wants to Be a Millionaire</h1>
+
+      <!-- Instructions -->
+      <div id="instructions" class="alert alert-info" role="alert">
+        <strong>Instructions:</strong>
+        <p>Select the correct answer for each question. You can only move to the next question if the current one is answered correctly.</p>
+        <p>Remember, $1,000 and $32,000 are safe points in the game. If you reach these points and answer incorrectly later, you'll still win the guaranteed amount.</p>
+      </div>
+
+      <!-- About the Game -->
+      <div id="about-game" class="alert alert-secondary" role="alert">
+        <strong>About the Game:</strong> Who Wants to Be a Millionaire is a quiz game where players answer a series of increasingly difficult questions to win cash prizes. Good luck!
+      </div>
+
+      <button id="start-btn" class="btn btn-primary" onclick="startGame()">Start Game</button>
+      <hr class="my-4">
+      <div id="question-container" style="display: none;">
+        <h3 id="question-number" class="mb-3"></h3>
+        <h3 id="question-text" class="mb-3"></h3>
+        <div id="options-container" class="mt-4"></div>
+        <div id="result-container" class="mt-4"></div>
+        <button id="next-btn" class="btn btn-primary mt-4" onclick="loadNextQuestion()" disabled>Next Question</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script type="module" src="./cookie.js"></script>
+  <script type="module" src="./questions.js"></script>
+  <script type="module" src="./game.js"></script>
+
+</body>
+</html>
