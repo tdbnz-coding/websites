@@ -14,13 +14,20 @@
 </head>
 
 <body>
-    <!-- Include the navbar -->
-    <div id="navbar-container">
-        <!-- Include the navbar.html file here -->
-        <!-- You can use PHP, server-side includes, or other methods to include the file -->
-        <!-- For example, using PHP: -->
-        <?php include('navbar.html'); ?>
-    </div>
+    <!-- Include the navbar using JavaScript -->
+    <script>
+        // Create a new div element
+        var navbarContainer = document.createElement('div');
+        navbarContainer.id = 'navbar-container';
+
+        // Load the navbar.html content using fetch
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                navbarContainer.innerHTML = data;
+                document.body.insertBefore(navbarContainer, document.body.firstChild);
+            });
+    </script>
 
     <div class="main">
         <div class="cover black" data-color="black"></div>
@@ -30,6 +37,10 @@
                 <h4 class="motto">My Coding Website</h4>
             </div>
         </div>
+    </div>
+
+    <div class="container">
+        <!-- Your additional content goes here -->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
