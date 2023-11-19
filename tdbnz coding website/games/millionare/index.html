@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Who Wants to Be a Millionaire</title>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <div class="jumbotron">
+      <h1 class="display-4">Who Wants to Be a Millionaire</h1>
+
+      <!-- Instructions -->
+      <div id="instructions" class="alert alert-info" role="alert">
+        <strong>Instructions:</strong>
+        <p>Select the correct answer for each question. You can only move to the next question if the current one is answered correctly.</p>
+        <p>Remember, $1,000 and $32,000 are safe points in the game. If you reach these points and answer incorrectly later, you'll still win the guaranteed amount.</p>
+      </div>
+
+      <!-- About the Game -->
+      <div id="about-game" class="alert alert-secondary" role="alert">
+        <strong>About the Game:</strong> Who Wants to Be a Millionaire is a quiz game where players answer a series of increasingly difficult questions to win cash prizes. Good luck!
+      </div>
+
+      <button id="start-btn" class="btn btn-primary" onclick="startGame()">Start Game</button>
+      <hr class="my-4">
+      <div id="question-container" style="display: none;">
+        <h3 id="question-number" class="mb-3"></h3>
+        <h3 id="question-text" class="mb-3"></h3>
+        <div id="options-container" class="mt-4"></div>
+        <div id="result-container" class="mt-4"></div>
+        <button id="next-btn" class="btn btn-primary mt-4" onclick="loadNextQuestion()" disabled>Next Question</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allQuestions = [
+      {
+        question: "What is the capital of France?",
+        options: ["London", "Paris", "Berlin", "Madrid"],
+        correctAnswer: "Paris",
+        value: 100
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Venus", "Jupiter"],
+        correctAnswer: "Mars",
+        value: 200
+      },
+      {
+        question: "What is the largest mammal?",
+        options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+        correctAnswer: "Blue Whale",
+        value: 300
+      },
+      {
+        question: "In which year did World War II end?",
+        options: ["1943", "1945", "1950", "1939"],
+        correctAnswer: "1945",
+        value: 500
+      },
+      {
+        question: "Who wrote 'Romeo and Juliet'?",
+        options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+        correctAnswer: "William Shakespeare",
+        value: 1000
+      },
+      {
+        question: "What is the currency of Japan?",
+        options: ["Yuan", "Won", "Yen", "Ringgit"],
+        correctAnswer: "Yen",
+        value: 2000
+      },
+      {
+        question: "Which planet is known as the 'Red Planet'?",
+        options: ["Earth", "Mars", "Venus", "Jupiter"],
+        correctAnswer: "Mars",
+        value: 4000
+      },
+      {
+        question: "In which year did the Titanic sink?",
+        options: ["1912", "1920", "1931", "1945"],
+        correctAnswer: "1912",
+        value: 8000
+      },
+      {
+        question: "How many continents are there?",
+        options: ["5", "6", "7", "8"],
+        correctAnswer: "7",
+        value: 16000
+      },
+      {
+        question: "What is the capital of Australia?",
+        options: ["Sydney", "Melbourne", "Canberra", "Perth"],
+        correctAnswer: "Canberra",
+        value: 32000
+      },
+      {
+        question: "Which of these is a prime number?",
+        options: ["9", "15", "21", "19"],
+        correctAnswer: "19",
+        value: 64000
+      },
+      {
+        question: "Who painted the Mona Lisa?",
+        options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+        correctAnswer: "Leonardo da Vinci",
+        value: 125000
+      },
+      {
+        question: "What is the largest ocean?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Pacific Ocean"],
+        correctAnswer: "Pacific Ocean",
+        value: 250000
+      },
+      {
+        question: "Which country is known as the Land of the Rising Sun?",
+        options: ["China", "Japan", "South Korea", "Vietnam"],
+        correctAnswer: "Japan",
+        value: 500000
+      },
+      {
+        question: "What is the highest mountain in the world?",
+        options: ["Mount Everest", "K2", "Kangchenjunga", "Lhotse"],
+        correctAnswer: "Mount Everest",
+        value: 1000000
+      }
+    ];
+
+    let currentQuestionIndex;
+    let currentQuestion;
+    let currentCashValue;
+
+    // Load saved progress from localStorage
+    function loadSavedProgress() {
+      const savedProgress = localStorage.getItem("gameProgress");
+      if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        currentQuestionIndex = progress.currentQuestionIndex;
+        currentCashValue = progress.currentCashValue;
+        loadQuestion();
+      }
+    }
+
+    // Save progress to localStorage
+    function saveProgress() {
+      const progress = {
+        currentQuestionIndex,
+        currentCashValue
+      };
+      localStorage.setItem("gameProgress", JSON.stringify(progress));
+    }
+
+    function startGame() {
+      currentQuestionIndex = 0;
+      currentCashValue = 100;
+      document.getElementById("start-btn").style.display = "none";
+      document.getElementById("instructions").style.display = "none";
+      document.getElementById("about-game").style.display = "none";
+      document.getElementById("question-container").style.display = "block";
+      document.getElementById("next-btn").innerHTML = "Next Question";
+      shuffleArray(allQuestions);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      currentQuestion = allQuestions[currentQuestionIndex];
+      document.getElementById("question-number").innerHTML = `Question ${currentQuestionIndex + 1} - Worth $${formatNumberWithCommas(currentCashValue)}`;
+      document.getElementById("question-text").innerHTML = currentQuestion.question;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      // Randomize the order of answer options
+      const shuffledOptions = shuffleArray([...currentQuestion.options]);
+      shuffledOptions.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "btn btn-light";
+        button.innerHTML = option;
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+      });
+    }
+
+    function checkAnswer(selectedOption) {
+      document.getElementById("next-btn").disabled = false;
+
+      // Disable other options once an answer is selected
+      const options = document.getElementById("options-container").getElementsByTagName("button");
+      for (let i = 0; i < options.length; i++) {
+        options[i].disabled = true;
+      }
+
+      if (selectedOption === currentQuestion.correctAnswer) {
+        document.getElementById("result-container").innerHTML = `<p class='text-success'>Correct! You've won $${formatNumberWithCommas(currentCashValue)}.</p>`;
+        if (currentCashValue === 1000 || currentCashValue === 32000) {
+          // Award $1,000 or $32,000 only if the corresponding question is answered correctly
+          document.getElementById("result-container").innerHTML += `<p class='text-success'>You've reached a safe point!</p>`;
+        }
+      } else {
+        document.getElementById("result-container").innerHTML = `<p class='text-danger'>Incorrect! You've failed. The correct answer is ${currentQuestion.correctAnswer}. You won $${formatNumberWithCommas(getGuaranteedAmount())}.</p>`;
+        document.getElementById("next-btn").innerHTML = "Play Again";
+      }
+
+      // Save progress after answering
+      saveProgress();
+    }
+
+    function loadNextQuestion() {
+      if (document.getElementById("next-btn").innerHTML === "Play Again") {
+        resetGame();
+        return;
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < allQuestions.length) {
+        currentCashValue = getCashValue(currentQuestionIndex);
+        loadQuestion();
+      } else {
+        document.getElementById("question-container").innerHTML = `<h3>Congratulations! You've completed the quiz and won $${formatNumberWithCommas(currentCashValue)}.</h3>`;
+        // Clear saved progress when the game is completed
+        localStorage.removeItem("gameProgress");
+      }
+
+      document.getElementById("next-btn").disabled = true;
+      document.getElementById("result-container").innerHTML = "";
+    }
+
+    function resetGame() {
+      document.getElementById("question-container").style.display = "none";
+      document.getElementById("start-btn").style.display = "block";
+      document.getElementById("instructions").style.display = "block";
+      document.getElementById("about-game").style.display = "block";
+      document.getElementById("next-btn").innerHTML = "Next Question";
+      document.getElementById("result-container").innerHTML = "";
+
+      // Enable all options for the next round
+      const options = document.getElementById("options-container").getElementsByTagName("button");
+      for (let i = 0; i < options.length; i++) {
+        options[i].disabled = false;
+      }
+
+      // Clear saved progress when starting over
+      localStorage.removeItem("gameProgress");
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function getCashValue(index) {
+      const cashValues = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
+      return cashValues[index];
+    }
+
+    function getGuaranteedAmount() {
+      if (currentCashValue >= 64000) {
+        return 32000;
+      } else if (currentCashValue >= 1000) {
+        return 1000;
+      } else {
+        return 0;
+      }
+    }
+
+    function formatNumberWithCommas(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Load saved progress on page load
+    window.onload = loadSavedProgress;
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
